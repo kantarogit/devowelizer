@@ -1,0 +1,28 @@
+name: CT
+
+on: [push, pull_request]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up JDK 21
+      uses: actions/setup-java@v2
+      with:
+        java-version: '21'
+        distribution: 'adopt'
+
+    - name: Compile project
+      run: mvn compile test-compile
+
+    - name: Run Docker container
+      run: |
+        docker pull casumo/devowelizer:latest
+        docker run -d -p 8086:8080 casumo/devowelizer:latest
+
+    - name: Run tests
+      run: mvn test
