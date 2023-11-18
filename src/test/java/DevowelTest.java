@@ -1,20 +1,40 @@
+import static model.DevowelInputModel.trying;
 import static org.hamcrest.Matchers.is;
 import org.apache.http.HttpStatus;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
-
 import client.DevowelApiClient;
 import io.restassured.response.Response;
-import model.DevowelInputModel;
 
 public class DevowelTest {
 
     private DevowelApiClient devowelApiClient;
 
-    @Test
-    public void canDevowelInput() {
+    @DataProvider(name = "inputAndExpectationForDevowelization")
+    public Object[][] createTestData() {
+        return new Object[][] {
+        {"hello o casumo", "hll csm"},
+        {"aeiou", ""},
+        {"AE IOU", ""},
+        {"Brk", "Brk"},
+        {" ", " "},
+        {"", ""},
+        {"Hello", "Hll"},
+        {"123", "123"},
+        {"123 plus 345", "123 pls 345"},
+        {"!@#$%^&*()", "!@#$%^&*()"},
+        {"Поздрав од Македонија", "Пздрв д Мкднј"},
+        {"你好", "你好"},
+        {"こんにちは", "こんにちは"},
+        {"😀😁😂", "😀😁😂"}
+        };
+    }
+
+    @Test(dataProvider = "inputAndExpectationForDevowelization")
+    public void canDevowelInput(String inputString, String expectedDevowelizedString) {
         devowelApiClient = DevowelApiClient.getInstance();
         Response response = devowelApiClient
-                .getDevowelized(DevowelInputModel.trying().withInput("kumsa lidududud apvorski ajt da dremnime"));
+                .getDevowelized(trying().withInput(inputString));  //method trying() statically imported for better readability
         response
                 .then()
                 .assertThat()
@@ -24,6 +44,6 @@ public class DevowelTest {
         response
                 .then()
                 .assertThat()
-                .body("html.body", is("kms ldddd pvrsk jt d drmnm MRDNAT"));
+                .body("html.body", is(expectedDevowelizedString));
     };
 }
