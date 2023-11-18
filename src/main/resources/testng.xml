@@ -1,0 +1,8 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<suite name="Parallel Test Suite" parallel="methods" thread-count="10">
+  <test name="DevowelTest">
+    <classes>
+      <class name="DevowelTest" />
+    </classes>
+  </test>
+</suite>
