@@ -33,6 +33,7 @@ Locally the docker container containing the target service should be running.
 Tests can be run by simply invoking maven **test** phase. There is only one property **app.casumo.api** defaulted to **localhost:8086** where it is assumed the service would be running. For other test environments (ex. dev, test etc.) or other ports on local machine, it can be overwritten on in the command line as 
 
 `mvn clean test -Dapp.casumo.api=http://testenv.domain.com`
+or
 `mvn clean test -Dapp.casumo.api=http://localhost:3000`
 
 Tests are run in parallel by default. To run the tests sequentally the parameter **parallel** should be set to false in the test class.
